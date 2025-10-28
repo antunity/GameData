@@ -89,10 +89,11 @@ namespace IndexedGameData
             else
                 EditorGUI.PropertyField(position, property, label, true);
 
+            propertyHeightCache.Clear();
+
             if (changed)
             {
                 numChildrenCache.Clear();
-                propertyHeightCache.Clear();
                 childrenLabelWidthCache.Clear();
             }
         }
