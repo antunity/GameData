@@ -40,6 +40,9 @@ namespace IndexedGameData
             if (items == null)
                 items = property.FindPropertyRelative(PROPERTY_INDEXEDREGISTRY_ITEMS);
 
+            if (items == null)
+                return base.GetPropertyHeight(property, label);
+
             return EditorGUI.GetPropertyHeight(items) + LAYOUT.BASE_PADDING;
         }
     }
