@@ -115,7 +115,10 @@ namespace IndexedGameData
                 throw new Exception($"`{nameof(IGameData)}` cannot be used as an index. Use '{nameof(IGameData.Index)}' a lookup in the registry of type `{typeof(TGameData)}`");
 
             if (!ContainsKey(index))
+            {
+                Debug.LogWarning($"Index `{index}` not found in list `{typeof(TGameData)}`");
                 return;
+            }
 
             int i = itemsIndex[index];
             itemsIndex.Remove(index);
