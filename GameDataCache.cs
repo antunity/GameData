@@ -3,24 +3,45 @@ using System.Collections.Generic;
 
 namespace IndexedGameData
 {
-    public static class GameDataCache<TAsset> where TAsset : class, IGameData
+    public static class GameDataCache<TIndex, TValue> where TIndex : struct where TValue : struct, ICopyable<TValue>
     {
-        private static GameDataRegister<TAsset> assets = new();
+        private static GameDataRegister<GameDataDefinition<TIndex, TValue>> assets = new();
 
         public static void Clear() => assets.Clear();
 
-        public static void RegisterGameData(TAsset asset) => assets.Add(asset);
+        public static void RegisterGameData(TIndex index, TValue template) => assets.Add(new(index, template));
 
-        public static TAsset GetGameData(object index)
+        public static TValue GetGameData(TIndex index)
         {
-            TAsset asset;
+            GameDataDefinition<TIndex, TValue> asset;
             if (assets.TryGetData(index, out asset))
-                return asset;
+                return asset.Template;
 
             throw new KeyNotFoundException(nameof(index));
         }
 
-        public static bool TryGetGameData(object index, out TAsset asset) => assets.TryGetData(index, out asset);
+        public static bool TryGetGameData(TIndex index, out TValue template)
+        {
+            GameDataDefinition<TIndex, TValue> asset;
+
+            if (assets.TryGetData(index, out asset))
+            {
+                template = asset.Template;
+                return true;
+            }
+
+            template = default;
+            return false;
+        }
+
+        public static GameDataDefinition<TIndex, TValue> TryRegisterGameData(TIndex index, TValue template)
+        {
+            if (assets.ContainsData(new(index, template)))
+                return assets[index];
+
+            assets.Add(new(index, template));
+            return assets[index];
+        }
 
         public static void Validate() => assets.Validate();
     }
