@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace uGameDataCORE
@@ -30,23 +31,24 @@ namespace uGameDataCORE
         public GameData(TIndex index) => this.index = index;
     }
 
-    public class GameDataDefinition<TIndex, TValue> : GameData<TIndex> where TValue : struct, ICopyable<TValue>
-    {
-        protected TValue template = default;
-
-        public TValue Template => template;
-
-        public GameDataDefinition(TIndex index, TValue template) : base(index) => this.template = template.Copy();
-    }
-
     public abstract class GameDataInstance<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
     {
-        private GameDataDefinition<TIndex, TValue> definition = default;
+        private readonly GameDataDefinition<TIndex, TValue> definition = default;
 
-        public GameDataDefinition<TIndex, TValue> Definition => definition;
+        public TValue Template => definition?.Template ?? throw new NullReferenceException(nameof(definition));
 
-        public TValue Template => definition?.Template ?? default;
+        public GameDataInstance(TIndex index, TValue template) : base(index) 
+        {
+            GameDataCache<TIndex, TValue>.RegisterTemplate(index, template);
 
-        public GameDataInstance(TIndex index, TValue template) : base(index) => definition = GameDataCache<TIndex, TValue>.TryRegisterGameData(index, template);
+            if (!GameDataCache<TIndex, TValue>.TryGetDefinition(index, out definition))
+                throw new KeyNotFoundException(nameof(index));
+        }
+
+        public GameDataInstance(TIndex index) : base(index)
+        {
+            if (!GameDataCache<TIndex, TValue>.TryGetDefinition(index, out definition))
+                throw new KeyNotFoundException(nameof(index));
+        }
     }
 }
