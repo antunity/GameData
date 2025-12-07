@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 
-namespace IndexedGameData
+namespace uGameDataCORE
 {
     public static class GameDataCache<TIndex, TValue> where TIndex : struct where TValue : struct, ICopyable<TValue>
     {

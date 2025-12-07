@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace IndexedGameData
+namespace uGameDataCORE
 {
     public interface ICopyable<T>
     {

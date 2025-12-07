@@ -1,6 +1,6 @@
 {
-    "name": "IndexedGameData",
-    "rootNamespace": "IndexedGameData",
+    "name": "uGameDataCORE",
+    "rootNamespace": "uGameDataCORE",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

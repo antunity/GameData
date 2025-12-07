@@ -4,7 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace IndexedGameData
+namespace uGameDataCORE
 {
     public enum GameDataLayout { None, Vertical, Horizontal }
 
@@ -18,7 +18,7 @@ namespace IndexedGameData
 
 #if UNITY_EDITOR
 
-namespace IndexedGameData
+namespace uGameDataCORE
 {
     [CustomPropertyDrawer(typeof(IGameData), true)]
     [CustomPropertyDrawer(typeof(DataValuePair<,>), true)]

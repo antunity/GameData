@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace IndexedGameData
+namespace uGameDataCORE
 {
     internal static class LAYOUT
     {
