@@ -4,7 +4,7 @@ using System.Reflection;
 using NUnit.Framework;
 using UnityEngine;
 
-using uGameDataCORE;
+using uGameData;
 
 namespace SharedTests
 {

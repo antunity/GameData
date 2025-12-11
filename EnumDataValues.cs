@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uGameDataCORE
+namespace uGameData
 {
     [Serializable]
     [GameDataDrawer(GameDataLayout.Vertical)]

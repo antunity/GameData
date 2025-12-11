@@ -1,6 +1,6 @@
 {
-    "name": "uGameDataCORE",
-    "rootNamespace": "uGameDataCORE",
+    "name": "uGameData",
+    "rootNamespace": "uGameData",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

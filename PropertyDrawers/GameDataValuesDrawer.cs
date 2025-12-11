@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace uGameDataCORE
+namespace uGameData
 {
     [CustomPropertyDrawer(typeof(GameDataValues<,>))]
     [CustomPropertyDrawer(typeof(EnumDataValues<,>))]

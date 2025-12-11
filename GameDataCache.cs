@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uGameDataCORE
+namespace uGameData
 {
     internal class GameDataDefinition<TIndex, TValue> : GameData<TIndex> where TValue : struct, ICopyable<TValue>
     {

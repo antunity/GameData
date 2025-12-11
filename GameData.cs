@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace uGameDataCORE
+namespace uGameData
 {
     public interface IGameDataBase
     {

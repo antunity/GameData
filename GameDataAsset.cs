@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace uGameDataCORE
+namespace uGameData
 {
     public abstract class GameDataAsset<TIndex> : ScriptableObject, IGameData<TIndex>
     {

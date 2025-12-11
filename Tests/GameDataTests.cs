@@ -1,6 +1,6 @@
 using NUnit.Framework;
 
-using uGameDataCORE;
+using uGameData;
 
 namespace SharedTests {
     internal class GameDataTests {
