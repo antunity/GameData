@@ -15,5 +15,7 @@ namespace uGameDataCORE
         [SerializeField] protected TValue template = default;
 
         public TValue Template => template;
+
+        private void OnValidate() => template.Validate();
     }
 }
