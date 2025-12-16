@@ -45,11 +45,21 @@ namespace uGameData
 
         public GameDataInstance(TIndex index, TValue? template = null) : base(index) 
         {
-            if (template.HasValue)
-                GameDataCache<TIndex, TValue>.RegisterTemplate(index, template.Value);
+            if (GameDataCacheManager.Enabled)
+            {
+                if (template.HasValue)
+                    GameDataCache<TIndex, TValue>.RegisterTemplate(index, template.Value);
 
-            if (!GameDataCache<TIndex, TValue>.TryGetDefinition(index, out definition))
-                throw new KeyNotFoundException(nameof(index));
+                if (!GameDataCache<TIndex, TValue>.TryGetDefinition(index, out definition))
+                    throw new KeyNotFoundException(nameof(index));
+            }
+            else
+            {
+                if (template.HasValue)
+                    definition = new GameDataDefinition<TIndex, TValue>(index, template.Value);
+                else
+                    throw new NullReferenceException($"{nameof(template)} cannot be null. Did you accidentally disable GameDataCacheManager?");
+            }
         }
     }
 }

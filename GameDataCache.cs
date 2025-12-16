@@ -100,6 +100,8 @@ namespace uGameData
             caches.Add((index, value), instance);
         }
 
+        public static bool Enabled { get; set; } = true;
+
         public static IReadOnlyCollection<(Type index, Type value)> RegisteredCacheTypes => caches.Keys;
 
         public static void ClearAll()
