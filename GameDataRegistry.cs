@@ -11,8 +11,12 @@ namespace uGameData
     {
         #region IEnumerable
 
-        public IEnumerator<TGameData> GetEnumerator() => items.ToList().GetEnumerator();
-
+        public IEnumerator<TGameData> GetEnumerator()
+        {
+            EnsureInitialised();
+            return items.ToList().GetEnumerator();
+        }
+        
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion IEnumerable
@@ -23,13 +27,13 @@ namespace uGameData
         {
             var copy = new GameDataRegistry<TGameData>();
             copy.items = new List<TGameData>(items);
-            copy.Validate();
+            copy.EnsureInitialised();
             return copy;
         }
 
-        public void Validate() => Validate(0);
-
         #endregion ICopyable
+
+        [NonSerialized] private bool isInitialised = false;
 
         [SerializeField] private List<TGameData> items = new();
 
@@ -39,6 +43,8 @@ namespace uGameData
         {
             get
             {
+                EnsureInitialised();
+
                 if (index is IGameDataBase data)
                     throw new Exception($"`{nameof(IGameDataBase)}` cannot be used as an index. Use '{nameof(IGameDataBase.GetIndex)}' a lookup in the registry of type `{typeof(TGameData)}`");
 
@@ -84,6 +90,8 @@ namespace uGameData
 
         public bool ContainsIndex(object index)
         {
+            EnsureInitialised();
+
             if (index == null)
                 return false;
 
@@ -126,7 +134,48 @@ namespace uGameData
             Validate(i);
         }
 
-        public void Validate(int start = 0)
+        protected void EnsureInitialised()
+        {
+            if (isInitialised)
+                return;
+
+            isInitialised = true;
+            Validate();
+        }
+
+        private void AddOrUpdate(TGameData data)
+        {
+            if (!TryAdd(data))
+                items[itemsIndex[data.GetIndex()]] = data;
+        }
+
+        private TGameData GetData(object index)
+        {
+            if (!ContainsIndex(index))
+                throw new Exception($"Index `{index}` not found in list `{typeof(TGameData)}`");
+
+            if (itemsIndex[index] >= items.Count)
+                throw new Exception($"Index `{index}` is out of range in list `{typeof(TGameData)}`");
+
+            return items[itemsIndex[index]];
+        }
+
+        private bool TryAdd(TGameData data)
+        {
+            EnsureInitialised();
+
+            object index = data.GetIndex();
+
+            if (itemsIndex.ContainsKey(index))
+                return false;
+
+            items.Add(data);
+            itemsIndex.Add(index, items.Count - 1);
+
+            return true;
+        }
+
+        private void Validate(int start = 0)
         {
             if (items.Count == 0)
             {
@@ -155,36 +204,6 @@ namespace uGameData
                     Debug.LogWarning($"Discarded item with duplicate index [{index}] at position {i} in {nameof(GameDataRegistry<TGameData>)}");
                 }
             }
-        }
-
-        private void AddOrUpdate(TGameData data)
-        {
-            if (!TryAdd(data))
-                items[itemsIndex[data.GetIndex()]] = data;
-        }
-
-        private TGameData GetData(object index)
-        {
-            if (!ContainsIndex(index))
-                throw new Exception($"Index `{index}` not found in list `{typeof(TGameData)}`");
-
-            if (itemsIndex[index] >= items.Count)
-                throw new Exception($"Index `{index}` is out of range in list `{typeof(TGameData)}`");
-
-            return items[itemsIndex[index]];
-        }
-
-        private bool TryAdd(TGameData data)
-        {
-            object index = data.GetIndex();
-
-            if (itemsIndex.ContainsKey(index))
-                return false;
-
-            items.Add(data);
-            itemsIndex.Add(index, items.Count - 1);
-
-            return true;
         }
     }
 }

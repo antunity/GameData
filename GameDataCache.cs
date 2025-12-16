@@ -10,7 +10,7 @@ namespace uGameData
         public TValue Template
         {
             get => template;
-            set => template = value.Copy();
+            set => template = value;
         }
 
         public GameDataDefinition(TIndex index, TValue template) : base(index) => this.template = template.Copy();

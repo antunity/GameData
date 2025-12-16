@@ -40,8 +40,12 @@ namespace uGameData
     {
         #region IEnumerable
 
-        public IEnumerator<DataValuePair<TGameData, TValue>> GetEnumerator() => dataValuePairs.ToList().GetEnumerator();
-
+        public IEnumerator<DataValuePair<TGameData, TValue>> GetEnumerator()
+        {
+            EnsureInitialised();
+            return dataValuePairs.GetEnumerator();
+        }
+        
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
         #endregion IEnumerable
@@ -52,13 +56,13 @@ namespace uGameData
         {
             var copy = new GameDataValues<TGameData, TValue>();
             copy.dataValuePairs = new List<DataValuePair<TGameData, TValue>>(dataValuePairs);
-            copy.Validate();
+            copy.EnsureInitialised();
             return copy;
         }
 
-        public void Validate() => Validate(0);
-
         #endregion ICopyable
+
+        [NonSerialized] private bool isInitialised = false;
 
         [SerializeField] protected List<DataValuePair<TGameData, TValue>> dataValuePairs = new();
 
@@ -117,6 +121,8 @@ namespace uGameData
 
         public bool ContainsIndex(object index)
         {
+            EnsureInitialised();
+
             if (index == null)
                 return false;
             
@@ -177,7 +183,49 @@ namespace uGameData
                 Remove(item.GetIndex());
         }
 
-        public virtual void Validate(int start = 0)
+        protected void AddOrUpdate(TGameData data, TValue value)
+        {
+            var pair = new DataValuePair<TGameData, TValue>(data, value);
+            if (!TryAdd(pair))
+                dataValuePairs[itemsIndex[data.GetIndex()]] = pair;
+        }
+
+        private TGameData GetData(object index)
+        {
+            if (!ContainsIndex(index))
+                throw new Exception($"Index `{index}` not found in list `{typeof(TGameData)}`");
+
+            if (itemsIndex[index] >= dataValuePairs.Count)
+                throw new Exception($"Index `{index}` is out of range in list `{typeof(TGameData)}`");
+
+            return dataValuePairs[itemsIndex[index]].Data;
+        }
+
+        private bool TryAdd(DataValuePair<TGameData, TValue> pair)
+        {
+            EnsureInitialised();
+
+            object index = pair.Data.GetIndex();
+
+            if (itemsIndex.ContainsKey(index))
+                return false;
+
+            dataValuePairs.Add(pair);
+            itemsIndex.Add(index, dataValuePairs.Count - 1);
+
+            return true;
+        }
+
+        protected void EnsureInitialised()
+        {
+            if (isInitialised)
+                return;
+
+            isInitialised = true;
+            Validate();
+        }
+
+        private void Validate(int start = 0)
         {
             if (dataValuePairs.Count == 0)
             {
@@ -211,37 +259,6 @@ namespace uGameData
                     Debug.LogWarning($"Discarded item with duplicate index [{index}] at position {i} in {nameof(GameDataValues<TGameData, TValue>)}");
                 }
             }
-        }
-
-        protected void AddOrUpdate(TGameData data, TValue value)
-        {
-            var pair = new DataValuePair<TGameData, TValue>(data, value);
-            if (!TryAdd(pair))
-                dataValuePairs[itemsIndex[data.GetIndex()]] = pair;
-        }
-
-        private TGameData GetData(object index)
-        {
-            if (!ContainsIndex(index))
-                throw new Exception($"Index `{index}` not found in list `{typeof(TGameData)}`");
-
-            if (itemsIndex[index] >= dataValuePairs.Count)
-                throw new Exception($"Index `{index}` is out of range in list `{typeof(TGameData)}`");
-
-            return dataValuePairs[itemsIndex[index]].Data;
-        }
-
-        private bool TryAdd(DataValuePair<TGameData, TValue> pair)
-        {
-            object index = pair.Data.GetIndex();
-
-            if (itemsIndex.ContainsKey(index))
-                return false;
-
-            dataValuePairs.Add(pair);
-            itemsIndex.Add(index, dataValuePairs.Count - 1);
-
-            return true;
         }
     }
 }

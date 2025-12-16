@@ -33,8 +33,6 @@ namespace uGameData
     public interface ICopyable<T>
     {
         T Copy();
-
-        void Validate();
     }
 
     public abstract class GameData<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>

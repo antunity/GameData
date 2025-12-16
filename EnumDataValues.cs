@@ -19,7 +19,7 @@ namespace uGameData
         {
             var copy = new EnumDataValues<TEnum, TValue>();
             copy.dataValuePairs = new List<DataValuePair<EnumData<TEnum>, TValue>>(dataValuePairs);
-            copy.Validate();
+            copy.EnsureInitialised();
             return copy;
         }
 
