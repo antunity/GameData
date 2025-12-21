@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uGameData
+namespace antunity.GameData
 {
     [Serializable]
     [GameDataDrawer(GameDataLayout.Vertical)]

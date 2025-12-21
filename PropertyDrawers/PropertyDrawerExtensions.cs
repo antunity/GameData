@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace uGameData {
+namespace antunity.GameData {
     public static class PropertyDrawerExtensions {
         public static Rect HorizontalFieldPosition(this PropertyDrawer propertyDrawer, Rect origin, int i, int numItems) {
             float widthPerProperty = (float)origin.width / numItems;

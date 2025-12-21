@@ -1,9 +1,9 @@
-# uGameData
+# antunity.GameData
 
-**uGameData** is a robust Unity toolkit designed to enforce an indexed architecture for game data. It bridges the gap between Unity's serialization system and high-performance dictionary-style lookups, providing an architecture for game data implementation.
+**antunity.GameData** is a robust Unity toolkit designed to enforce an indexed architecture for game data. It bridges the gap between Unity's serialization system and high-performance dictionary-style lookups, providing an architecture for game data implementation.
 
 ## Core Philosophy
-In many game architectures, data needs to be easily retrievable via unique keys (enums or integer IDs). **uGameData** enforces this by ensuring every data entry implements `IGameDataBase` and provides a unique index.
+In many game architectures, data needs to be easily retrievable via unique keys (enums or integer IDs). **antunity.GameData** enforces this by ensuring every data entry implements `IGameDataBase` and provides a unique index.
 
 ## Key Features
 
@@ -41,7 +41,7 @@ The toolkit provides specialized containers to manage your data collections:
 To create a new type of game data, inherit from `GameDataAsset`:
 
 ```csharp
-using uGameData;
+using antunity.GameData;
 
 // Define an enum - alternatively you can use integer IDs
 public enum ItemType { Sword, Shield }
@@ -62,7 +62,7 @@ You can then reference these in a registry within a MonoBehaviour:
 
 ```csharp
 using UnityEngine;
-using uGameData;
+using antunity.GameData;
 
 public class InventoryManager : MonoBehaviour {
     [SerializeField] private GameDataRegistry<ItemData> itemRegistry;

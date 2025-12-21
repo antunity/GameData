@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace uGameData
+namespace antunity.GameData
 {
     internal class GameDataDefinition<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace uGameData
+namespace antunity.GameData
 {
     [Serializable]
     [GameDataDrawer(GameDataLayout.Vertical)]

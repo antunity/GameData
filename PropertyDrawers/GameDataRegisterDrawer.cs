@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace uGameData
+namespace antunity.GameData
 {
     internal static class LAYOUT
     {

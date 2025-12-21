@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace uGameData
+namespace antunity.GameData
 {
     [Serializable]
     public class GameDataRegistry<TGameData> : IEnumerable<TGameData>, ICopyable<GameDataRegistry<TGameData>> where TGameData : class, IGameDataBase
