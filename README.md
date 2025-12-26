@@ -1,9 +1,9 @@
 # antunity.GameData
 
-**antunity.GameData** is a robust Unity toolkit designed to enforce an indexed architecture for game data. It bridges the gap between Unity's serialization system and high-performance dictionary-style lookups, providing an architecture for game data implementation.
+**antunity.GameData** is a Unity toolkit designed to provide an generic architecture for game data with a unique index. It bridges the gap between Unity's serialization system and high-performance dictionary-style lookups, providing an architecture for game data implementation.
 
 ## Core Philosophy
-In many game architectures, data needs to be easily retrievable via unique keys (enums or integer IDs). **antunity.GameData** enforces this by ensuring every data entry implements `IGameDataBase` and provides a unique index.
+In many game architectures, data needs to be easily retrievable via unique keys (enums or integer IDs). **antunity.GameData** supports this natively by implementing relevant interfaces such as `IGameDataBase` which provides a unique index.
 
 ## Key Features
 
@@ -11,7 +11,7 @@ In many game architectures, data needs to be easily retrievable via unique keys 
 * **Template & Definition System**: A built-in caching layer allows you to define "template" data that can be registered and retrieved efficiently.
 * **ScriptableObject Integration**: Extends `ScriptableObject` through `GameDataAsset` to allow data definitions to live as project assets.
 * **Safe Data Copying**: Utilizes an `ICopyable` interface to ensure that complex data structures can be cloned without reference bleeding between instances.
-* **Lazy Rehydration**: Automatically rebuilds internal lookup indices only when accessed, bypassing Unity's serialization depth issues and "empty list" bugs.
+* **Lazy Initialization**: Automatically rebuilds internal lookup indices only when accessed, bypassing Unity's serialization depth issues and "empty list" bugs.
 
 ---
 
@@ -79,10 +79,10 @@ public class InventoryManager : MonoBehaviour {
 
 ## Technical Details
 
-### Self-Healing Dictionary
-
-When Unity reloads a scene or performs a domain reload, the internal Dictionary (used for O(1) lookups) is lost. The toolkit detects this on the next data access and automatically triggers a `Validate()` to rebuild the index from the serialized List.
-
 ### Copying Logic
 
 The `Copy()` method in `GameDataRegistry` and `GameDataValues` creates a new list instance while maintaining the indexed structure. This ensures that runtime modifications (like adding or removing items) to one registry do not affect the original source asset.
+
+### Self-Healing Dictionary
+
+In serialized data, when Unity reloads a scene or performs a domain reload, the internal Dictionary (used for O(1) lookups) is lost. The toolkit detects this on the next data access and automatically triggers a `Validate()` to rebuild the index from the serialized List.

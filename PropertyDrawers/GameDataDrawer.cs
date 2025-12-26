@@ -6,12 +6,16 @@ using UnityEngine;
 
 namespace antunity.GameData
 {
+    /// <summary>Specifies a preference for vertical or horizontal display.</summary>
     public enum GameDataLayout { None, Vertical, Horizontal }
 
+    /// <summary>Attribute to specify a layout for the property drawer.</summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = true)]
     public sealed class GameDataDrawerAttribute : Attribute
     {
+        /// <summary>The specified layout.</summary>
         public GameDataLayout Layout { get; }
+
         public GameDataDrawerAttribute(GameDataLayout layout) => Layout = layout;
     }
 }
@@ -20,6 +24,9 @@ namespace antunity.GameData
 
 namespace antunity.GameData
 {
+    /// <summary>
+    /// A custom property drawer for game data types typically contained in registries and lists.
+    /// </summary>
     [CustomPropertyDrawer(typeof(IGameDataBase), true)]
     [CustomPropertyDrawer(typeof(DataValuePair<,>), true)]
     public class GameDataPropertyDrawer : PropertyDrawer

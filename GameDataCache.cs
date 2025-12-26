@@ -3,67 +3,7 @@ using System.Collections.Generic;
 
 namespace antunity.GameData
 {
-    internal class GameDataDefinition<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
-    {
-        protected TValue template = default;
-
-        public TValue Template
-        {
-            get => template;
-            set => template = value;
-        }
-
-        public GameDataDefinition(TIndex index, TValue template) : base(index) => this.template = template.Copy();
-    }
-
-    public static class GameDataCache<TIndex, TValue> where TIndex : struct where TValue : struct, ICopyable<TValue>
-    {
-        private static GameDataRegistry<GameDataDefinition<TIndex, TValue>> assets = new();
-
-        static GameDataCache() => GameDataCacheManager.RegisterCache<TIndex, TValue>();
-
-        internal static bool TryGetDefinition(TIndex index, out GameDataDefinition<TIndex, TValue> definition)
-        {
-            GameDataDefinition<TIndex, TValue> asset;
-
-            if (assets.TryGetData(index, out asset))
-            {
-                definition = asset;
-                return true;
-            }
-
-            definition = default;
-            return false;
-        }
-
-        public static void Clear() => assets.Clear();
-
-        public static void RegisterTemplate(TIndex index, TValue template)
-        {
-            if (assets.ContainsIndex(index))
-            {
-                assets[index].Template = template;
-                return;
-            }
-
-            assets.Add(new(index, template));
-        }
-
-        public static bool TryGetTemplate(TIndex index, out TValue template)
-        {
-            GameDataDefinition<TIndex, TValue> asset;
-
-            if (assets.TryGetData(index, out asset))
-            {
-                template = asset.Template;
-                return true;
-            }
-
-            template = default;
-            return false;
-        }
-    }
-
+    // Internal helper interface
     internal interface IGameDataCache
     {
         void Clear();
@@ -110,6 +50,78 @@ namespace antunity.GameData
                 cache.Clear();
 
             caches.Clear();
+        }
+    }
+
+    internal class GameDataDefinition<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
+    {
+        protected TValue template = default;
+
+        public TValue Template
+        {
+            get => template;
+            set => template = value;
+        }
+
+        public GameDataDefinition(TIndex index, TValue template) : base(index) => this.template = template.Copy();
+    }
+
+    /// <summary>A runtime cache of instantiated game data. Designed as the game-wide source for indexed game data templates.</summary>
+    /// <typeparam name="TIndex">the index type</typeparam>
+    /// <typeparam name="TValue">the type of the data struct</typeparam>
+    public static class GameDataCache<TIndex, TValue> where TIndex : struct where TValue : struct, ICopyable<TValue>
+    {
+        private static GameDataRegistry<GameDataDefinition<TIndex, TValue>> assets = new();
+
+        static GameDataCache() => GameDataCacheManager.RegisterCache<TIndex, TValue>();
+
+        internal static bool TryGetDefinition(TIndex index, out GameDataDefinition<TIndex, TValue> definition)
+        {
+            GameDataDefinition<TIndex, TValue> asset;
+
+            if (assets.TryGetData(index, out asset))
+            {
+                definition = asset;
+                return true;
+            }
+
+            definition = default;
+            return false;
+        }
+
+        /// <summary>Clears the cached game data.</summary>
+        public static void Clear() => assets.Clear();
+
+        /// <summary>Registers a game data template to the cache.</summary>
+        /// <param name="index">the index of the game data</param>
+        /// <param name="template">the template for the game data</param>
+        public static void RegisterTemplate(TIndex index, TValue template)
+        {
+            if (assets.ContainsIndex(index))
+            {
+                assets[index].Template = template;
+                return;
+            }
+
+            assets.Add(new(index, template));
+        }
+
+        /// <summary>Attempts to get a game data template with the provided index.</summary>
+        /// <param name="index">the index of the game data</param>
+        /// <param name="template">the game data template</param>
+        /// <returns>true if the template was found in the cache, false if it was not.</returns>
+        public static bool TryGetTemplate(TIndex index, out TValue template)
+        {
+            GameDataDefinition<TIndex, TValue> asset;
+
+            if (assets.TryGetData(index, out asset))
+            {
+                template = asset.Template;
+                return true;
+            }
+
+            template = default;
+            return false;
         }
     }
 }

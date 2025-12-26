@@ -15,8 +15,11 @@ namespace antunity.GameData
 
     }
 
+    /// <summary>
+    /// A custom property drawer for GameDataRegistry<>.
+    /// </summary>
     [CustomPropertyDrawer(typeof(GameDataRegistry<>))]
-    public class GameDataRegisterDrawer : PropertyDrawer
+    public class GameDataRegistryDrawer : PropertyDrawer
     {
         private const string PROPERTY_INDEXEDREGISTRY_ITEMS = "items";
 

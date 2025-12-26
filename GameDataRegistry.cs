@@ -6,6 +6,11 @@ using UnityEngine;
 
 namespace antunity.GameData
 {
+    /// <summary>
+    /// A serializable dictionary-style registry for serializing game data by their unique index.
+    /// This structure is Unity inspector-friendly.
+    /// </summary>
+    /// <typeparam name="TGameData">the type of the serialized game data</typeparam>
     [Serializable]
     public class GameDataRegistry<TGameData> : IEnumerable<TGameData>, ICopyable<GameDataRegistry<TGameData>> where TGameData : class, IGameDataBase
     {
@@ -39,6 +44,10 @@ namespace antunity.GameData
 
         private readonly Dictionary<object, int> itemsIndex = new();
 
+        /// <summary>Can be used to get or set game data in the registry.</summary>
+        /// <param name="index">the index</param>
+        /// <returns>the game data</returns>
+        /// <exception cref="Exception">thrown if the index is of invalid type or when the index is not found in the registry</exception>
         public TGameData this[object index]
         {
             get
@@ -68,26 +77,39 @@ namespace antunity.GameData
             }
         }
 
+        /// <summary>The number of items in the registry.</summary>
         public int Count => items.Count;
 
+        /// <summary>A list of game data in the registry.</summary>
         public IReadOnlyList<TGameData> Data => items.ToList().AsReadOnly();
 
+        /// <summary>A list of the unique keys in the registry.</summary>
         public IReadOnlyList<object> Keys => items.ConvertAll(item => item.GetIndex()).AsReadOnly();
 
+        /// <summary>Adds a game data entry to the registry.</summary>
+        /// <param name="data">the game data</param>
+        /// <exception cref="Exception">thrown when data with a duplicate index key is found</exception>
         public void Add(TGameData data)
         {
             if (!TryAdd(data))
                 throw new Exception($"Index `{data.GetIndex()}` already exists in list `{typeof(TGameData)}`");
         }
 
+        /// <summary>Clears all items from the registry.</summary>
         public void Clear()
         {
             itemsIndex.Clear();
             items.Clear();
         }
 
+        /// <summary>Checks whether the provided data is found in the registry.</summary>
+        /// <param name="data">the game data</param>
+        /// <returns>true if the data is found</returns>
         public bool ContainsData(TGameData data) => data != null && ContainsIndex(data.GetIndex());
 
+        /// <summary>Checks if a specific index key is found in the registry.</summary>
+        /// <param name="index">the index</param>
+        /// <returns>true if the index is found</returns>
         public bool ContainsIndex(object index)
         {
             EnsureInitialised();
@@ -101,6 +123,11 @@ namespace antunity.GameData
             return itemsIndex.ContainsKey(index);
         }
 
+        /// <summary>Attempts to get game data by the specified index.</summary>
+        /// <param name="index">the index</param>
+        /// <param name="data">the returned data</param>
+        /// <returns>true of the data is found</returns>
+        /// <exception cref="Exception">thrown when an index of invalid type is used</exception>
         public bool TryGetData(object index, out TGameData data)
         {
             if (index is IGameDataBase)
@@ -116,10 +143,13 @@ namespace antunity.GameData
             return false;
         }
 
+        /// <summary>Removes game data associated with a specific index.</summary>
+        /// <param name="index">the index</param>
+        /// <exception cref="Exception">thrown if the index is of type IGameDataBase</exception>
         public void Remove(object index)
         {
             if (index is IGameDataBase)
-                throw new Exception($"`{nameof(IGameDataBase)}` cannot be used as an index. Use '{nameof(IGameDataBase.GetIndex)}' a lookup in the registry of type `{typeof(TGameData)}`");
+                throw new Exception($"`{nameof(IGameDataBase)}` cannot be used as an index. Use '{nameof(IGameDataBase.GetIndex)}' to perform a lookup in the registry of type `{typeof(TGameData)}`");
 
             if (!ContainsIndex(index))
             {
