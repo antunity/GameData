@@ -18,6 +18,9 @@ namespace antunity.GameData
 
         public GameDataDrawerAttribute(GameDataLayout layout) => Layout = layout;
     }
+
+    /// <summary>Tag interface for types that should be rendered by the custom drawer.</summary>
+    public interface IUseGameDataDrawer { };
 }
 
 #if UNITY_EDITOR
@@ -27,8 +30,7 @@ namespace antunity.GameData
     /// <summary>
     /// A custom property drawer for game data types typically contained in registries and lists.
     /// </summary>
-    [CustomPropertyDrawer(typeof(IGameDataBase), true)]
-    [CustomPropertyDrawer(typeof(DataValuePair<,>), true)]
+    [CustomPropertyDrawer(typeof(IUseGameDataDrawer), true)]
     public class GameDataPropertyDrawer : PropertyDrawer
     {
         private bool DEBUG_LOG = false;
@@ -36,6 +38,8 @@ namespace antunity.GameData
         private bool DEBUG_LOG_HEIGHT = false;
 
         private string selectedProperty = string.Empty;
+
+        private bool? isInitialized = null;
 
         Dictionary<Type, GameDataLayout> layoutCache = new();
 
@@ -47,6 +51,13 @@ namespace antunity.GameData
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
+            // Expand on first initialize
+            if (isInitialized == null)
+            {
+                property.isExpanded = true;
+                isInitialized = true;
+            }
+
             if (Event.current.type == EventType.Layout)
                 return;
 
@@ -174,6 +185,8 @@ namespace antunity.GameData
                     // Render property field
                     if (property.isExpanded && !changed)
                         this.HorizontalPropertyField(itemPosition, iterator, GUIContent.none, counter, numChildren);
+
+                    enterChildren = false;
                 }
 
                 counter += 1;

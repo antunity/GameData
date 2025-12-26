@@ -10,7 +10,7 @@ namespace antunity.GameData
     /// <typeparam name="TValue">the value type</typeparam>
     [Serializable]
     [GameDataDrawer(GameDataLayout.Vertical)]
-    public struct DataValuePair<TGameData, TValue> where TGameData : IGameDataBase
+    public struct DataValuePair<TGameData, TValue> : IUseGameDataDrawer where TGameData : IGameDataBase
     {
         [Tooltip("An indexed data entry associated with a value.")]
         [SerializeField] private TGameData data;
