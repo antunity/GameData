@@ -6,7 +6,7 @@ namespace antunity.GameData
     /// <typeparam name="TIndex">the index type</typeparam>
     public abstract class GameDataAsset<TIndex> : ScriptableObject, IGameData<TIndex>
     {
-        [Tooltip("A unique index associated with this entry.")]
+        [Tooltip("A unique index associated with this game data entry.")]
         [SerializeField] protected TIndex index = default;
 
         /// <inheritdoc/>
@@ -18,6 +18,7 @@ namespace antunity.GameData
     /// <typeparam name="TValue">the type of the data struct</typeparam>
     public abstract class GameDataAsset<TIndex, TValue> : GameDataAsset<TIndex> where TValue : struct, ICopyable<TValue>
     {
+        [Tooltip("A template for this game data entry.")]
         [SerializeField] protected TValue template = default;
 
         /// <summary>Returns the template struct for this instance of game data.</summary>
