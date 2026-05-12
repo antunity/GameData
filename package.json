@@ -1,0 +1,21 @@
+{
+  "name": "com.antunity.gamedata",
+  "version": "0.2.0",
+  "displayName": "Game Data",
+  "description": "Game data library for Unity",
+  "unity": "6000.3",
+  "unityRelease": "13f1",
+  "author": {
+    "name": "Fedow",
+    "email": "support.antsoftware@gmail.com"
+  },
+  "dependencies": {
+    "com.unity.modules.ui": "1.0.0",
+    "com.unity.render-pipelines.universal": "12.1.7"
+  },
+  "keywords": [
+    "data",
+    "framework"
+  ],
+  "category": "Tooling"
+}
