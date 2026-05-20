@@ -53,7 +53,7 @@ namespace antunity.GameData
     /// </summary>
     /// <typeparam name="TIndex">the index type</typeparam>
     /// <typeparam name="TValue">the type of the data struct</typeparam>
-    public abstract class GameData<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
+    public class GameData<TIndex, TValue> : GameData<TIndex> where TIndex : struct where TValue : struct, ICopyable<TValue>
     {
         private readonly GameDataDefinition<TIndex, TValue> definition = default;
 
