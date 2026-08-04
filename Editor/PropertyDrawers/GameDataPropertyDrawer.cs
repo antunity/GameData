@@ -371,7 +371,7 @@ namespace antunity.GameData
                 {
                     if (iterator.objectReferenceValue && iterator.objectReferenceValue is IGameDataBase gameData)
                     {
-                        headerString = $"Index [{gameData.GetIndex()}]...";
+                        headerString = $"{gameData}...";
                     }
                 }
                 else
@@ -396,7 +396,7 @@ namespace antunity.GameData
                     if (iterator.propertyType == SerializedPropertyType.ObjectReference)
                     {
                         if (iterator.objectReferenceValue && iterator.objectReferenceValue is IGameDataBase gameData)
-                            headerString = $"Index [{gameData.GetIndex()}]";
+                            headerString = $"{gameData}...";
                     }
 
                     headers.Add(headerString);
@@ -416,7 +416,7 @@ namespace antunity.GameData
             if (iterator.propertyType == SerializedPropertyType.ObjectReference)
             {
                 if (iterator.objectReferenceValue && iterator.objectReferenceValue is IGameDataBase gameData)
-                    header = $"Index [{gameData.GetIndex()}]...";
+                    header = $"{gameData}...";
             }
             else
             {

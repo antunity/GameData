@@ -27,6 +27,8 @@ namespace antunity.GameData
     [Serializable]
     public abstract class GameData<TIndex> : IGameData<TIndex> where TIndex : struct
     {
+        public override string ToString() => $"[{index}]";
+
         [SerializeField] private TIndex index = default;
 
         /// <inheritdoc/>

@@ -6,6 +6,8 @@ namespace antunity.GameData
     /// <typeparam name="TIndex">the index type</typeparam>
     public abstract class GameDataAsset<TIndex> : ScriptableObject, IGameData<TIndex>
     {
+        public override string ToString() => name;
+
         [Tooltip("A unique index associated with this game data entry.")]
         [SerializeField] protected TIndex index = default;
 
