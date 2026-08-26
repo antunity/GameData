@@ -6,6 +6,8 @@ namespace antunity.GameData
     /// <typeparam name="TIndex">the index type</typeparam>
     public abstract class GameDataAsset<TIndex> : ScriptableObject, IGameData<TIndex>
     {
+        private object boxedIndex;
+
         public override string ToString() => name;
 
         [Tooltip("A unique index associated with this game data entry.")]
@@ -13,6 +15,9 @@ namespace antunity.GameData
 
         /// <inheritdoc/>
         public TIndex Index => index;
+
+        /// <inheritdoc/>
+        object IGameDataBase.GetIndex() => boxedIndex ??= Index;
     }
 
     /// <summary>A serialized form of an indexed game data instance with a struct to hold relevant game data.</summary>

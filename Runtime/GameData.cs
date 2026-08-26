@@ -17,9 +17,6 @@ namespace antunity.GameData
     {
         /// <summary>Returns the index of the game data.</summary>
         TIndex Index { get; }
-
-        /// <inheritdoc/>
-        object IGameDataBase.GetIndex() => Index;
     }
 
     /// <summary>An implementation of IGameData for game data with a unique index.</summary>
@@ -27,6 +24,8 @@ namespace antunity.GameData
     [Serializable]
     public abstract class GameData<TIndex> : IGameData<TIndex> where TIndex : struct
     {
+        private object boxedIndex;
+
         public override string ToString() => $"[{index}]";
 
         [SerializeField] private TIndex index = default;
@@ -35,8 +34,15 @@ namespace antunity.GameData
         public TIndex Index
         {
             get => index;
-            set => index = value;
+            set
+            {
+                index = value;
+                boxedIndex = null; // Invalidate the cached boxed index
+            }
         }
+
+        /// <inheritdoc/>
+        object IGameDataBase.GetIndex() => boxedIndex ??= Index;
 
         public GameData(TIndex index) => this.index = index;
     }
